@@ -69,11 +69,7 @@ const App = () => {
       
       const logoPaths = [
         '/src/assets/logo.png',
-        './src/assets/logo.png',
-        '../assets/logo.png',
-        './assets/logo.png',
-        '/assets/logo.png',
-        'assets/logo.png'
+        '/logo.png'
       ];
 
       for (const path of logoPaths) {

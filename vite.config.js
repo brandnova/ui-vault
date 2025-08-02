@@ -3,14 +3,10 @@ import react from '@vitejs/plugin-react'
 
 export default defineConfig({
   plugins: [react()],
+  base: '/ui-vault/',
   build: {
     manifest: true,
-    outDir: '../static/dist',
-    rollupOptions: {
-      input: {
-        main: './src/main.jsx',
-      },
-    },
+    outDir: 'dist'
   },
   server: {
     origin: 'http://localhost:5173',
