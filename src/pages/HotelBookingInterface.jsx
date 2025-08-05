@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
 import { 
   Calendar, MapPin, Users, Clock, Check, ChevronLeft, ChevronRight, Star, 
   Moon, Sun, Menu, X, Phone, Mail, MapPin as Location, Wifi, Car, 
@@ -171,7 +170,7 @@ const HotelBookingInterface = () => {
     const today = new Date();
 
     for (let i = 0; i < firstDay; i++) {
-      days.push(<div key={`empty-${i}`} className="h-10"></div>);
+      days.push(<div key={`empty-${i}`} className="h-8 sm:h-10"></div>);
     }
 
     for (let day = 1; day <= daysInMonth; day++) {
@@ -181,11 +180,11 @@ const HotelBookingInterface = () => {
       const isInRange = isDateInRange(day);
       
       days.push(
-        <motion.button
+        <button
           key={day}
           onClick={() => !isPast && handleDateClick(day)}
           disabled={isPast}
-          className={`h-10 w-10 rounded-xl text-sm font-medium transition-all duration-200 relative ${
+          className={`h-8 w-8 sm:h-10 sm:w-10 rounded-lg sm:rounded-xl text-xs sm:text-sm font-medium transition-all duration-200 relative ${
             isPast 
               ? `text-gray-300 cursor-not-allowed ${darkMode ? 'text-gray-600' : ''}` 
               : isSelected
@@ -194,19 +193,9 @@ const HotelBookingInterface = () => {
               ? `bg-blue-100 text-blue-600 ${darkMode ? 'bg-blue-900/30 text-blue-400' : ''}`
               : `hover:bg-gray-100 text-gray-700 ${darkMode ? 'hover:bg-gray-700 text-gray-300' : ''}`
           }`}
-          whileHover={!isPast ? { scale: 1.05, y: -2 } : {}}
-          whileTap={!isPast ? { scale: 0.95 } : {}}
         >
           {day}
-          {isSelected && (
-            <motion.div
-              className="absolute inset-0 rounded-xl"
-              initial={{ scale: 0 }}
-              animate={{ scale: 1 }}
-              transition={{ type: "spring", stiffness: 300, damping: 20 }}
-            />
-          )}
-        </motion.button>
+        </button>
       );
     }
 
@@ -257,27 +246,6 @@ const HotelBookingInterface = () => {
     return calculateSubtotal() + calculateTaxes();
   };
 
-  const stepVariants = {
-    enter: { opacity: 0, x: 50, scale: 0.95 },
-    center: { opacity: 1, x: 0, scale: 1 },
-    exit: { opacity: 0, x: -50, scale: 0.95 }
-  };
-
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.1
-      }
-    }
-  };
-
-  const itemVariants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: { opacity: 1, y: 0 }
-  };
-
   const themeClasses = darkMode ? 'dark bg-gray-900' : 'bg-gradient-to-br from-blue-50 via-white to-purple-50';
   const cardClasses = darkMode 
     ? 'bg-gray-800 border-gray-700 text-white' 
@@ -285,1144 +253,889 @@ const HotelBookingInterface = () => {
 
   return (
     <div className={`min-h-screen transition-all duration-500 ${themeClasses}`}>
-      {/* Notifications */}
-      <AnimatePresence>
-        {notifications.map((notification) => (
-          <motion.div
-            key={notification.id}
-            initial={{ opacity: 0, y: -50, x: 50 }}
-            animate={{ opacity: 1, y: 0, x: 0 }}
-            exit={{ opacity: 0, y: -50, x: 50 }}
-            className={`fixed top-4 right-4 z-50 px-4 py-3 rounded-xl shadow-lg backdrop-blur-sm ${
-              notification.type === 'success' ? 'bg-green-500/90 text-white' :
-              notification.type === 'error' ? 'bg-red-500/90 text-white' :
-              'bg-blue-500/90 text-white'
-            }`}
-          >
-            <div className="flex items-center gap-2">
-              {notification.type === 'success' && <CheckCircle2 size={16} />}
-              <span className="text-sm font-medium">{notification.message}</span>
-            </div>
-          </motion.div>
-        ))}
-      </AnimatePresence>
+      {/* Notifications - Mobile Optimized */}
+      {notifications.map((notification) => (
+        <div
+          key={notification.id}
+          className={`fixed top-2 left-2 right-2 sm:top-4 sm:right-4 sm:left-auto z-50 px-3 py-2 sm:px-4 sm:py-3 rounded-lg sm:rounded-xl shadow-lg backdrop-blur-sm transition-all duration-300 ${
+            notification.type === 'success' ? 'bg-green-500/90 text-white' :
+            notification.type === 'error' ? 'bg-red-500/90 text-white' :
+            'bg-blue-500/90 text-white'
+          }`}
+        >
+          <div className="flex items-center gap-2">
+            {notification.type === 'success' && <CheckCircle2 size={14} className="sm:w-4 sm:h-4" />}
+            <span className="text-xs sm:text-sm font-medium">{notification.message}</span>
+          </div>
+        </div>
+      ))}
 
-      {/* Navigation */}
-      <motion.nav 
-        initial={{ y: -100 }}
-        animate={{ y: 0 }}
+      {/* Navigation - Mobile Optimized */}
+      <nav 
         className={`sticky top-0 z-40 backdrop-blur-md border-b transition-all duration-300 ${
           darkMode ? 'bg-gray-900/80 border-gray-700' : 'bg-white/80 border-gray-200'
         }`}
       >
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center py-4">
-            <motion.div 
-              className="flex items-center gap-3"
-              whileHover={{ scale: 1.05 }}
-            >
-              <div className="w-10 h-10 bg-gradient-to-r from-blue-500 to-purple-600 rounded-xl flex items-center justify-center">
-                <Home className="text-white" size={20} />
+        <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
+          <div className="flex justify-between items-center py-3 sm:py-4">
+            <div className="flex items-center gap-2 sm:gap-3 hover:scale-105 transition-transform duration-200">
+              <div className="w-8 h-8 sm:w-10 sm:h-10 bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg sm:rounded-xl flex items-center justify-center">
+                <Home className="text-white" size={16} />
               </div>
-              <span className={`text-xl font-bold ${darkMode ? 'text-white' : 'text-gray-900'}`}>
+              <span className={`text-lg sm:text-xl font-bold ${darkMode ? 'text-white' : 'text-gray-900'}`}>
                 LuxeStay
               </span>
-            </motion.div>
+            </div>
 
             {/* Desktop Navigation */}
             <div className="hidden md:flex items-center gap-6">
               <nav className="flex items-center gap-1">
                 {['Home', 'Rooms', 'About', 'Contact'].map((item) => (
-                  <motion.button
+                  <button
                     key={item}
-                    className={`px-4 py-2 rounded-lg transition-all ${
+                    className={`px-4 py-2 rounded-lg transition-all hover:scale-105 ${
                       darkMode ? 'text-gray-300 hover:text-white hover:bg-gray-700' : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'
                     }`}
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
                   >
                     {item}
-                  </motion.button>
+                  </button>
                 ))}
               </nav>
               
               <div className="flex items-center gap-3">
-                <motion.button
+                <button
                   onClick={() => setDarkMode(!darkMode)}
-                  className={`p-3 rounded-xl transition-all ${
+                  className={`p-3 rounded-xl transition-all hover:scale-110 ${
                     darkMode ? 'bg-gray-700 text-yellow-400' : 'bg-gray-100 text-gray-600'
                   }`}
-                  whileHover={{ scale: 1.1, rotate: 180 }}
-                  whileTap={{ scale: 0.9 }}
                 >
                   {darkMode ? <Sun size={18} /> : <Moon size={18} />}
-                </motion.button>
+                </button>
                 
-                <motion.button
-                  className="relative p-3 rounded-xl bg-gradient-to-r from-blue-500 to-purple-600 text-white"
-                  whileHover={{ scale: 1.1 }}
-                  whileTap={{ scale: 0.9 }}
+                <button
+                  className="relative p-3 rounded-xl bg-gradient-to-r from-blue-500 to-purple-600 text-white hover:scale-110 transition-transform"
                 >
                   <Bell size={18} />
                   <span className="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full"></span>
-                </motion.button>
+                </button>
                 
-                <motion.button
-                  className={`p-3 rounded-xl transition-all ${
+                <button
+                  className={`p-3 rounded-xl transition-all hover:scale-110 ${
                     darkMode ? 'bg-gray-700 text-white' : 'bg-gray-100 text-gray-600'
                   }`}
-                  whileHover={{ scale: 1.1 }}
-                  whileTap={{ scale: 0.9 }}
                 >
                   <User size={18} />
-                </motion.button>
+                </button>
               </div>
             </div>
 
-            {/* Mobile menu button */}
-            <motion.button
-              className={`md:hidden p-2 rounded-lg ${darkMode ? 'text-white' : 'text-gray-900'}`}
-              onClick={() => setIsMenuOpen(!isMenuOpen)}
-              whileTap={{ scale: 0.95 }}
-            >
-              {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
-            </motion.button>
+            {/* Mobile Controls */}
+            <div className="flex items-center gap-2 md:hidden">
+              <button
+                onClick={() => setDarkMode(!darkMode)}
+                className={`p-2 rounded-lg transition-all ${
+                  darkMode ? 'bg-gray-700 text-yellow-400' : 'bg-gray-100 text-gray-600'
+                }`}
+              >
+                {darkMode ? <Sun size={16} /> : <Moon size={16} />}
+              </button>
+              
+              <button
+                className={`p-2 rounded-lg ${darkMode ? 'text-white' : 'text-gray-900'}`}
+                onClick={() => setIsMenuOpen(!isMenuOpen)}
+              >
+                {isMenuOpen ? <X size={20} /> : <Menu size={20} />}
+              </button>
+            </div>
           </div>
         </div>
 
         {/* Mobile menu */}
-        <AnimatePresence>
-          {isMenuOpen && (
-            <motion.div
-              initial={{ opacity: 0, height: 0 }}
-              animate={{ opacity: 1, height: 'auto' }}
-              exit={{ opacity: 0, height: 0 }}
-              className={`md:hidden border-t ${darkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200'}`}
-            >
-              <div className="px-4 py-4 space-y-2">
-                {['Home', 'Rooms', 'About', 'Contact'].map((item) => (
-                  <motion.button
-                    key={item}
-                    className={`block w-full text-left px-4 py-3 rounded-lg transition-all ${
-                      darkMode ? 'text-gray-300 hover:bg-gray-700' : 'text-gray-600 hover:bg-gray-100'
-                    }`}
-                    whileHover={{ x: 10 }}
-                  >
-                    {item}
-                  </motion.button>
-                ))}
-                <div className="flex items-center gap-3 pt-4">
-                  <motion.button
-                    onClick={() => setDarkMode(!darkMode)}
-                    className={`p-3 rounded-xl transition-all ${
-                      darkMode ? 'bg-gray-700 text-yellow-400' : 'bg-gray-100 text-gray-600'
-                    }`}
-                    whileHover={{ scale: 1.1 }}
-                  >
-                    {darkMode ? <Sun size={18} /> : <Moon size={18} />}
-                  </motion.button>
-                  <motion.button
-                    className="p-3 rounded-xl bg-gradient-to-r from-blue-500 to-purple-600 text-white"
-                    whileHover={{ scale: 1.1 }}
-                  >
-                    <User size={18} />
-                  </motion.button>
-                </div>
-              </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
-      </motion.nav>
-
-      <div className="max-w-6xl mx-auto px-4 py-8">
-        {/* Header */}
-        <motion.div 
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="text-center mb-8"
-        >
-          <motion.h1 
-            className={`text-5xl font-bold mb-4 bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent`}
-            initial={{ scale: 0.8 }}
-            animate={{ scale: 1 }}
-            transition={{ type: "spring", stiffness: 200 }}
+        {isMenuOpen && (
+          <div
+            className={`md:hidden border-t transition-all duration-300 overflow-hidden ${
+              darkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200'
+            }`}
           >
-            Book Your Perfect Stay
-          </motion.h1>
-          <motion.p 
-            className={`text-lg ${darkMode ? 'text-gray-300' : 'text-gray-600'}`}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.2 }}
-          >
-            Experience luxury and comfort like never before
-          </motion.p>
-        </motion.div>
-
-        {/* Progress Bar */}
-        <motion.div 
-          className="flex items-center justify-center mb-8"
-          variants={containerVariants}
-          initial="hidden"
-          animate="visible"
-        >
-          {[
-            { step: 1, icon: Calendar, label: 'Dates' },
-            { step: 2, icon: MapPin, label: 'Room' },
-            { step: 3, icon: Users, label: 'Details' },
-            { step: 4, icon: CreditCard, label: 'Payment' },
-            { step: 5, icon: CheckCircle2, label: 'Complete' }
-          ].map(({ step, icon: Icon, label }, index) => (
-            <React.Fragment key={step}>
-              <motion.div
-                variants={itemVariants}
-                className="flex flex-col items-center"
-              >
-                <motion.div
-                  className={`w-12 h-12 rounded-full flex items-center justify-center text-sm font-medium mb-2 transition-all duration-300 ${
-                    step <= currentStep 
-                      ? 'bg-gradient-to-r from-blue-500 to-purple-600 text-white shadow-lg shadow-blue-500/25' 
-                      : darkMode 
-                      ? 'bg-gray-700 text-gray-400' 
-                      : 'bg-gray-200 text-gray-500'
+            <div className="px-3 py-3 space-y-1">
+              {['Home', 'Rooms', 'About', 'Contact'].map((item) => (
+                <button
+                  key={item}
+                  className={`block w-full text-left px-3 py-2 rounded-lg transition-all ${
+                    darkMode ? 'text-gray-300 hover:bg-gray-700' : 'text-gray-600 hover:bg-gray-100'
                   }`}
-                  animate={{ 
-                    scale: step === currentStep ? 1.1 : 1,
-                    rotate: step < currentStep ? 360 : 0
-                  }}
-                  transition={{ duration: 0.3 }}
+                  onClick={() => setIsMenuOpen(false)}
                 >
-                  {step < currentStep ? <Check size={16} /> : <Icon size={16} />}
-                </motion.div>
-                <span className={`text-xs font-medium ${
-                  step <= currentStep 
-                    ? darkMode ? 'text-white' : 'text-gray-900'
-                    : darkMode ? 'text-gray-500' : 'text-gray-400'
-                }`}>
-                  {label}
-                </span>
-              </motion.div>
-              {index < 4 && (
-                <motion.div 
-                  className={`w-16 h-1 mx-4 rounded-full transition-all duration-500 ${
-                    step < currentStep 
-                      ? 'bg-gradient-to-r from-blue-500 to-purple-600' 
-                      : darkMode ? 'bg-gray-700' : 'bg-gray-200'
-                  }`}
-                  variants={itemVariants}
-                />
-              )}
-            </React.Fragment>
-          ))}
-        </motion.div>
+                  {item}
+                </button>
+              ))}
+              <div className="flex items-center gap-2 pt-3 border-t border-gray-200 dark:border-gray-700">
+                <button
+                  className="p-2 rounded-lg bg-gradient-to-r from-blue-500 to-purple-600 text-white"
+                >
+                  <User size={16} />
+                </button>
+                <button
+                  className="relative p-2 rounded-lg bg-gradient-to-r from-blue-500 to-purple-600 text-white"
+                >
+                  <Bell size={16} />
+                  <span className="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full"></span>
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+      </nav>
 
-        {/* Main Content */}
-        <motion.div 
-          className={`rounded-3xl shadow-2xl p-8 backdrop-blur-sm border transition-all duration-500 ${cardClasses}`}
-          layout
-          initial={{ opacity: 0, y: 50 }}
-          animate={{ opacity: 1, y: 0 }}
-        >
-          <AnimatePresence mode="wait">
-            {isLoading && (
-              <motion.div
-                className="flex items-center justify-center py-20"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-              >
-                <div className="flex items-center gap-3">
-                  <motion.div
-                    className="w-6 h-6 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full"
-                    animate={{ rotate: 360 }}
-                    transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
-                  />
-                  <span className={`text-lg font-medium ${darkMode ? 'text-white' : 'text-gray-700'}`}>
-                    Processing...
+      <div className="max-w-6xl mx-auto px-3 sm:px-4 py-4 sm:py-8">
+        {/* Header - Mobile Optimized */}
+        <div className="text-center mb-6 sm:mb-8">
+          <h1 className={`text-2xl sm:text-4xl lg:text-5xl font-bold mb-2 sm:mb-4 bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent`}>
+            Book Your Perfect Stay
+          </h1>
+          <p className={`text-sm sm:text-lg ${darkMode ? 'text-gray-300' : 'text-gray-600'}`}>
+            Experience luxury and comfort like never before
+          </p>
+        </div>
+
+        {/* Progress Bar - Mobile Optimized */}
+        <div className="flex items-center justify-center mb-6 sm:mb-8 overflow-x-auto pb-2">
+          <div className="flex items-center min-w-max px-4">
+            {[
+              { step: 1, icon: Calendar, label: 'Dates' },
+              { step: 2, icon: MapPin, label: 'Room' },
+              { step: 3, icon: Users, label: 'Details' },
+              { step: 4, icon: CreditCard, label: 'Payment' },
+              { step: 5, icon: CheckCircle2, label: 'Complete' }
+            ].map(({ step, icon: Icon, label }, index) => (
+              <React.Fragment key={step}>
+                <div className="flex flex-col items-center">
+                  <div
+                    className={`w-8 h-8 sm:w-12 sm:h-12 rounded-full flex items-center justify-center text-xs sm:text-sm font-medium mb-1 sm:mb-2 transition-all duration-300 ${
+                      step <= currentStep 
+                        ? 'bg-gradient-to-r from-blue-500 to-purple-600 text-white shadow-lg shadow-blue-500/25' 
+                        : darkMode 
+                        ? 'bg-gray-700 text-gray-400' 
+                        : 'bg-gray-200 text-gray-500'
+                    } ${step === currentStep ? 'scale-110' : ''}`}
+                  >
+                    {step < currentStep ? <Check size={12} className="sm:w-4 sm:h-4" /> : <Icon size={12} className="sm:w-4 sm:h-4" />}
+                  </div>
+                  <span className={`text-xs font-medium ${
+                    step <= currentStep 
+                      ? darkMode ? 'text-white' : 'text-gray-900'
+                      : darkMode ? 'text-gray-500' : 'text-gray-400'
+                  }`}>
+                    {label}
                   </span>
                 </div>
-              </motion.div>
-            )}
+                {index < 4 && (
+                  <div 
+                    className={`w-8 sm:w-16 h-1 mx-2 sm:mx-4 rounded-full transition-all duration-500 ${
+                      step < currentStep 
+                        ? 'bg-gradient-to-r from-blue-500 to-purple-600' 
+                        : darkMode ? 'bg-gray-700' : 'bg-gray-200'
+                    }`}
+                  />
+                )}
+              </React.Fragment>
+            ))}
+          </div>
+        </div>
 
-            {!isLoading && currentStep === 1 && (
-              <motion.div
-                key="step1"
-                variants={stepVariants}
-                initial="enter"
-                animate="center"
-                exit="exit"
-                transition={{ duration: 0.4, type: "spring" }}
-              >
-                <motion.h2 
-                  className={`text-3xl font-bold mb-8 flex items-center ${darkMode ? 'text-white' : 'text-gray-900'}`}
-                  initial={{ opacity: 0, x: -20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                >
-                  <Calendar className="mr-4 text-blue-500" size={32} />
-                  When would you like to stay?
-                </motion.h2>
-                
-                <div className="grid lg:grid-cols-2 gap-8 mb-8">
-                  <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.1 }}
+        {/* Main Content - Mobile Optimized */}
+        <div 
+          className={`rounded-2xl sm:rounded-3xl shadow-2xl p-4 sm:p-8 backdrop-blur-sm border transition-all duration-500 ${cardClasses}`}
+        >
+          {isLoading && (
+            <div className="flex items-center justify-center py-12 sm:py-20">
+              <div className="flex items-center gap-3">
+                <div className="w-5 h-5 sm:w-6 sm:h-6 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full animate-spin" />
+                <span className={`text-base sm:text-lg font-medium ${darkMode ? 'text-white' : 'text-gray-700'}`}>
+                  Processing...
+                </span>
+              </div>
+            </div>
+          )}
+
+          {!isLoading && currentStep === 1 && (
+            <div key="step1">
+              <h2 className={`text-xl sm:text-3xl font-bold mb-6 sm:mb-8 flex items-center ${darkMode ? 'text-white' : 'text-gray-900'}`}>
+                <Calendar className="mr-2 sm:mr-4 text-blue-500" size={24} />
+                When would you like to stay?
+              </h2>
+              
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8 mb-6 sm:mb-8">
+                <div>
+                  <label className={`block text-sm font-semibold mb-3 ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>
+                    Check-in & Check-out Dates
+                  </label>
+                  <button
+                    onClick={() => setIsDatePickerOpen(!isDatePickerOpen)}
+                    className={`w-full p-4 sm:p-6 border-2 rounded-xl sm:rounded-2xl transition-all duration-300 text-left group hover:scale-[1.02] hover:-translate-y-0.5 ${
+                      isDatePickerOpen 
+                        ? 'border-blue-500 bg-blue-50 shadow-lg shadow-blue-500/10' 
+                        : darkMode
+                        ? 'border-gray-600 hover:border-gray-500 bg-gray-700'
+                        : 'border-gray-200 hover:border-gray-300 hover:shadow-md'
+                    }`}
                   >
-                    <label className={`block text-sm font-semibold mb-3 ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>
-                      Check-in & Check-out Dates
-                    </label>
-                    <motion.button
-                      onClick={() => setIsDatePickerOpen(!isDatePickerOpen)}
-                      className={`w-full p-6 border-2 rounded-2xl transition-all duration-300 text-left group ${
-                        isDatePickerOpen 
-                          ? 'border-blue-500 bg-blue-50 shadow-lg shadow-blue-500/10' 
-                          : darkMode
-                          ? 'border-gray-600 hover:border-gray-500 bg-gray-700'
-                          : 'border-gray-200 hover:border-gray-300 hover:shadow-md'
-                      }`}
-                      whileHover={{ scale: 1.02, y: -2 }}
-                      whileTap={{ scale: 0.98 }}
-                    >
-                      <div className="flex justify-between items-center">
-                        <div className="flex-1">
-                          <div className={`text-sm font-medium mb-1 ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>
-                            Check-in
-                          </div>
-                          <div className={`text-lg font-semibold ${darkMode ? 'text-white' : 'text-gray-900'}`}>
-                            {formatDate(selectedDates.checkIn)}
-                          </div>
+                    <div className="flex justify-between items-center">
+                      <div className="flex-1">
+                        <div className={`text-xs sm:text-sm font-medium mb-1 ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>
+                          Check-in
                         </div>
-                        <motion.div 
-                          className="px-4"
-                          animate={{ x: isDatePickerOpen ? 5 : 0 }}
-                        >
-                          <div className="w-8 h-8 rounded-full bg-gradient-to-r from-blue-500 to-purple-600 flex items-center justify-center">
-                            <ChevronRight className="text-white" size={16} />
-                          </div>
-                        </motion.div>
-                        <div className="flex-1">
-                          <div className={`text-sm font-medium mb-1 ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>
-                            Check-out
-                          </div>
-                          <div className={`text-lg font-semibold ${darkMode ? 'text-white' : 'text-gray-900'}`}>
-                            {formatDate(selectedDates.checkOut)}
-                          </div>
+                        <div className={`text-sm sm:text-lg font-semibold ${darkMode ? 'text-white' : 'text-gray-900'}`}>
+                          {formatDate(selectedDates.checkIn)}
                         </div>
                       </div>
-                      {selectedDates.checkIn && selectedDates.checkOut && (
-                        <motion.div
-                          initial={{ opacity: 0, height: 0 }}
-                          animate={{ opacity: 1, height: 'auto' }}
-                          className="mt-4 pt-4 border-t border-gray-200 text-center"
-                        >
-                          <span className="inline-flex items-center gap-2 px-3 py-1 bg-green-100 text-green-700 rounded-full text-sm font-medium">
-                            <Clock size={14} />
-                            {calculateNights()} nights
-                          </span>
-                        </motion.div>
-                      )}
-                    </motion.button>
-                  </motion.div>
-
-                  <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.2 }}
-                  >
-                    <label className={`block text-sm font-semibold mb-3 ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>
-                      Guests
-                    </label>
-                    <div className="grid grid-cols-2 gap-4">
-                      {[
-                        { key: 'adults', label: 'Adults', min: 1 },
-                        { key: 'children', label: 'Children', min: 0 }
-                      ].map(({ key, label, min }) => (
-                        <motion.div
-                          key={key}
-                          className={`p-4 border-2 rounded-2xl transition-all ${
-                            darkMode ? 'border-gray-600 bg-gray-700' : 'border-gray-200 hover:border-gray-300'
-                          }`}
-                          whileHover={{ scale: 1.02 }}
-                        >
-                          <div className={`text-sm font-medium mb-3 ${darkMode ? 'text-gray-300' : 'text-gray-600'}`}>
-                            {label}
-                          </div>
-                          <div className="flex items-center justify-center gap-4">
-                            <motion.button
-                              onClick={() => setGuests(prev => ({ 
-                                ...prev, 
-                                [key]: Math.max(min, prev[key] - 1) 
-                              }))}
-                              className={`w-10 h-10 rounded-full transition-all ${
-                                guests[key] === min 
-                                  ? darkMode ? 'bg-gray-600 text-gray-500' : 'bg-gray-100 text-gray-400'
-                                  : 'bg-gradient-to-r from-blue-500 to-purple-600 text-white hover:shadow-lg'
-                              }`}
-                              disabled={guests[key] === min}
-                              whileHover={guests[key] > min ? { scale: 1.1 } : {}}
-                              whileTap={guests[key] > min ? { scale: 0.9 } : {}}
-                            >
-                              -
-                            </motion.button>
-                            <motion.span 
-                              className={`text-2xl font-bold ${darkMode ? 'text-white' : 'text-gray-900'}`}
-                              key={guests[key]}
-                              initial={{ scale: 1.2 }}
-                              animate={{ scale: 1 }}
-                            >
-                              {guests[key]}
-                            </motion.span>
-                            <motion.button
-                              onClick={() => setGuests(prev => ({ 
-                                ...prev, 
-                                [key]: prev[key] + 1 
-                              }))}
-                              className="w-10 h-10 rounded-full bg-gradient-to-r from-blue-500 to-purple-600 text-white hover:shadow-lg transition-all"
-                              whileHover={{ scale: 1.1 }}
-                              whileTap={{ scale: 0.9 }}
-                            >
-                              +
-                            </motion.button>
-                          </div>
-                        </motion.div>
-                      ))}
+                      <div className={`px-2 sm:px-4 transition-transform ${isDatePickerOpen ? 'translate-x-1' : ''}`}>
+                        <div className="w-6 h-6 sm:w-8 sm:h-8 rounded-full bg-gradient-to-r from-blue-500 to-purple-600 flex items-center justify-center">
+                          <ChevronRight className="text-white" size={14} />
+                        </div>
+                      </div>
+                      <div className="flex-1">
+                        <div className={`text-xs sm:text-sm font-medium mb-1 ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>
+                          Check-out
+                        </div>
+                        <div className={`text-sm sm:text-lg font-semibold ${darkMode ? 'text-white' : 'text-gray-900'}`}>
+                          {formatDate(selectedDates.checkOut)}
+                        </div>
+                      </div>
                     </div>
-                  </motion.div>
+                    {selectedDates.checkIn && selectedDates.checkOut && (
+                      <div className="mt-3 sm:mt-4 pt-3 sm:pt-4 border-t border-gray-200 text-center">
+                        <span className="inline-flex items-center gap-2 px-3 py-1 bg-green-100 text-green-700 rounded-full text-xs sm:text-sm font-medium">
+                          <Clock size={12} className="sm:w-4 sm:h-4" />
+                          {calculateNights()} nights
+                        </span>
+                      </div>
+                    )}
+                  </button>
                 </div>
 
-                <AnimatePresence>
-                  {isDatePickerOpen && (
-                    <motion.div
-                      initial={{ opacity: 0, height: 0, y: -20 }}
-                      animate={{ opacity: 1, height: 'auto', y: 0 }}
-                      exit={{ opacity: 0, height: 0, y: -20 }}
-                      className={`border-2 rounded-2xl p-6 mb-8 backdrop-blur-sm ${
-                        darkMode ? 'bg-gray-800/50 border-gray-600' : 'bg-white/80 border-gray-200'
-                      }`}
-                    >
-                      <div className="flex items-center justify-between mb-6">
-                        <motion.button
-                          onClick={() => setCurrentMonth(new Date(currentMonth.getFullYear(), currentMonth.getMonth() - 1))}
-                          className={`p-3 rounded-xl transition-all ${
-                            darkMode ? 'hover:bg-gray-700 text-gray-300' : 'hover:bg-gray-100 text-gray-600'
-                          }`}
-                          whileHover={{ scale: 1.1, x: -2 }}
-                          whileTap={{ scale: 0.9 }}
-                        >
-                          <ChevronLeft size={20} />
-                        </motion.button>
-                        <motion.h3 
-                          className={`text-xl font-bold ${darkMode ? 'text-white' : 'text-gray-900'}`}
-                          key={currentMonth.getMonth()}
-                          initial={{ opacity: 0 }}
-                          animate={{ opacity: 1 }}
-                        >
-                          {currentMonth.toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}
-                        </motion.h3>
-                        <motion.button
-                          onClick={() => setCurrentMonth(new Date(currentMonth.getFullYear(), currentMonth.getMonth() + 1))}
-                          className={`p-3 rounded-xl transition-all ${
-                            darkMode ? 'hover:bg-gray-700 text-gray-300' : 'hover:bg-gray-100 text-gray-600'
-                          }`}
-                          whileHover={{ scale: 1.1, x: 2 }}
-                          whileTap={{ scale: 0.9 }}
-                        >
-                          <ChevronRight size={20} />
-                        </motion.button>
-                      </div>
-                      <div className="grid grid-cols-7 gap-2 mb-4">
-                        {['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'].map(day => (
-                          <div key={day} className={`h-10 flex items-center justify-center text-sm font-semibold ${
-                            darkMode ? 'text-gray-400' : 'text-gray-500'
-                          }`}>
-                            {day}
-                          </div>
-                        ))}
-                      </div>
-                      <div className="grid grid-cols-7 gap-2">
-                        {renderCalendar()}
-                      </div>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-              </motion.div>
-            )}
-
-            {!isLoading && currentStep === 2 && (
-              <motion.div
-                key="step2"
-                variants={stepVariants}
-                initial="enter"
-                animate="center"
-                exit="exit"
-                transition={{ duration: 0.4, type: "spring" }}
-              >
-                <motion.h2 
-                  className={`text-3xl font-bold mb-8 flex items-center ${darkMode ? 'text-white' : 'text-gray-900'}`}
-                  initial={{ opacity: 0, x: -20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                >
-                  <MapPin className="mr-4 text-blue-500" size={32} />
-                  Choose Your Perfect Room
-                </motion.h2>
-                
-                <div className="space-y-6">
-                  {rooms.map((room, index) => (
-                    <motion.div
-                      key={room.id}
-                      initial={{ opacity: 0, y: 50 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: index * 0.1 }}
-                      onClick={() => {
-                        setSelectedRoom(room);
-                        addNotification(`${room.name} selected`, 'success');
-                      }}
-                      onMouseEnter={() => setHoveredRoom(room.id)}
-                      onMouseLeave={() => setHoveredRoom(null)}
-                      className={`relative border-2 rounded-2xl overflow-hidden cursor-pointer transition-all duration-300 group ${
-                        selectedRoom?.id === room.id 
-                          ? 'border-blue-500 shadow-2xl shadow-blue-500/20 scale-[1.02]' 
-                          : darkMode 
-                          ? 'border-gray-600 hover:border-gray-500 hover:shadow-xl' 
-                          : 'border-gray-200 hover:border-gray-300 hover:shadow-xl'
-                      }`}
-                      whileHover={{ y: -5 }}
-                    >
-                      {selectedRoom?.id === room.id && (
-                        <motion.div
-                          className="absolute top-4 left-4 z-10 bg-gradient-to-r from-blue-500 to-purple-600 text-white px-3 py-1 rounded-full text-sm font-medium"
-                          initial={{ scale: 0, rotate: -180 }}
-                          animate={{ scale: 1, rotate: 0 }}
-                          transition={{ type: "spring", stiffness: 300 }}
-                        >
-                          <Check size={16} className="inline mr-1" />
-                          Selected
-                        </motion.div>
-                      )}
-                      
-                      <motion.button
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          toggleSavedRoom(room.id);
-                        }}
-                        className={`absolute top-4 right-4 z-10 p-2 rounded-full backdrop-blur-sm transition-all ${
-                          savedRooms.has(room.id) 
-                            ? 'bg-red-500 text-white' 
-                            : 'bg-white/80 text-gray-600 hover:bg-white'
+                <div>
+                  <label className={`block text-sm font-semibold mb-3 ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>
+                    Guests
+                  </label>
+                  <div className="grid grid-cols-2 gap-3 sm:gap-4">
+                    {[
+                      { key: 'adults', label: 'Adults', min: 1 },
+                      { key: 'children', label: 'Children', min: 0 }
+                    ].map(({ key, label, min }) => (
+                      <div
+                        key={key}
+                        className={`p-3 sm:p-4 border-2 rounded-xl sm:rounded-2xl transition-all hover:scale-[1.02] ${
+                          darkMode ? 'border-gray-600 bg-gray-700' : 'border-gray-200 hover:border-gray-300'
                         }`}
-                        whileHover={{ scale: 1.1 }}
-                        whileTap={{ scale: 0.9 }}
                       >
-                        <Heart size={16} className={savedRooms.has(room.id) ? 'fill-current' : ''} />
-                      </motion.button>
+                        <div className={`text-xs sm:text-sm font-medium mb-2 sm:mb-3 ${darkMode ? 'text-gray-300' : 'text-gray-600'}`}>
+                          {label}
+                        </div>
+                        <div className="flex items-center justify-center gap-3 sm:gap-4">
+                          <button
+                            onClick={() => setGuests(prev => ({ 
+                              ...prev, 
+                              [key]: Math.max(min, prev[key] - 1) 
+                            }))}
+                            className={`w-8 h-8 sm:w-10 sm:h-10 rounded-full transition-all text-sm sm:text-base ${
+                              guests[key] === min 
+                                ? darkMode ? 'bg-gray-600 text-gray-500' : 'bg-gray-100 text-gray-400'
+                                : 'bg-gradient-to-r from-blue-500 to-purple-600 text-white hover:shadow-lg hover:scale-110'
+                            }`}
+                            disabled={guests[key] === min}
+                          >
+                            -
+                          </button>
+                          <span className={`text-xl sm:text-2xl font-bold ${darkMode ? 'text-white' : 'text-gray-900'}`}>
+                            {guests[key]}
+                          </span>
+                          <button
+                            onClick={() => setGuests(prev => ({ 
+                              ...prev, 
+                              [key]: prev[key] + 1 
+                            }))}
+                            className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-gradient-to-r from-blue-500 to-purple-600 text-white hover:shadow-lg transition-all hover:scale-110 text-sm sm:text-base"
+                          >
+                            +
+                          </button>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
 
-                      <div className="flex flex-col lg:flex-row">
-                        <div className="relative lg:w-80 h-64 lg:h-auto overflow-hidden">
-                          <motion.img
-                            src={room.image}
-                            alt={room.name}
-                            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-                            initial={{ scale: 1.1 }}
-                            animate={{ scale: 1 }}
-                          />
-                          <div className="absolute bottom-4 left-4 flex gap-2">
-                            {room.badges.map((badge, idx) => (
-                              <motion.span
-                                key={badge}
-                                initial={{ opacity: 0, x: -20 }}
-                                animate={{ opacity: 1, x: 0 }}
-                                transition={{ delay: 0.3 + idx * 0.1 }}
-                                className={`px-2 py-1 rounded-full text-xs font-medium backdrop-blur-sm ${
-                                  badge === 'Popular' ? 'bg-orange-500/90 text-white' :
-                                  badge === 'Luxury' ? 'bg-purple-500/90 text-white' :
-                                  badge === 'Best Value' ? 'bg-green-500/90 text-white' :
-                                  'bg-blue-500/90 text-white'
-                                }`}
-                              >
-                                {badge}
-                              </motion.span>
-                            ))}
+              {isDatePickerOpen && (
+                <div
+                  className={`border-2 rounded-xl sm:rounded-2xl p-4 sm:p-6 mb-6 sm:mb-8 backdrop-blur-sm transition-all duration-300 ${
+                    darkMode ? 'bg-gray-800/50 border-gray-600' : 'bg-white/80 border-gray-200'
+                  }`}
+                >
+                  <div className="flex items-center justify-between mb-4 sm:mb-6">
+                    <button
+                      onClick={() => setCurrentMonth(new Date(currentMonth.getFullYear(), currentMonth.getMonth() - 1))}
+                      className={`p-2 sm:p-3 rounded-lg sm:rounded-xl transition-all hover:scale-110 ${
+                        darkMode ? 'hover:bg-gray-700 text-gray-300' : 'hover:bg-gray-100 text-gray-600'
+                      }`}
+                    >
+                      <ChevronLeft size={18} className="sm:w-5 sm:h-5" />
+                    </button>
+                    <h3 className={`text-lg sm:text-xl font-bold ${darkMode ? 'text-white' : 'text-gray-900'}`}>
+                      {currentMonth.toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}
+                    </h3>
+                    <button
+                      onClick={() => setCurrentMonth(new Date(currentMonth.getFullYear(), currentMonth.getMonth() + 1))}
+                      className={`p-2 sm:p-3 rounded-lg sm:rounded-xl transition-all hover:scale-110 ${
+                        darkMode ? 'hover:bg-gray-700 text-gray-300' : 'hover:bg-gray-100 text-gray-600'
+                      }`}
+                    >
+                      <ChevronRight size={18} className="sm:w-5 sm:h-5" />
+                    </button>
+                  </div>
+                  <div className="grid grid-cols-7 gap-1 sm:gap-2 mb-3 sm:mb-4">
+                    {['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'].map(day => (
+                      <div key={day} className={`h-8 sm:h-10 flex items-center justify-center text-xs sm:text-sm font-semibold ${
+                        darkMode ? 'text-gray-400' : 'text-gray-500'
+                      }`}>
+                        {day}
+                      </div>
+                    ))}
+                  </div>
+                  <div className="grid grid-cols-7 gap-1 sm:gap-2">
+                    {renderCalendar()}
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
+
+          {!isLoading && currentStep === 2 && (
+            <div key="step2">
+              <h2 className={`text-xl sm:text-3xl font-bold mb-6 sm:mb-8 flex items-center ${darkMode ? 'text-white' : 'text-gray-900'}`}>
+                <MapPin className="mr-2 sm:mr-4 text-blue-500" size={24} />
+                Choose Your Perfect Room
+              </h2>
+              
+              <div className="space-y-4 sm:space-y-6">
+                {rooms.map((room, index) => (
+                  <div
+                    key={room.id}
+                    onClick={() => {
+                      setSelectedRoom(room);
+                      addNotification(`${room.name} selected`, 'success');
+                    }}
+                    onMouseEnter={() => setHoveredRoom(room.id)}
+                    onMouseLeave={() => setHoveredRoom(null)}
+                    className={`relative border-2 rounded-xl sm:rounded-2xl overflow-hidden cursor-pointer transition-all duration-300 group hover:-translate-y-1 ${
+                      selectedRoom?.id === room.id 
+                        ? 'border-blue-500 shadow-2xl shadow-blue-500/20 scale-[1.02]' 
+                        : darkMode 
+                        ? 'border-gray-600 hover:border-gray-500 hover:shadow-xl' 
+                        : 'border-gray-200 hover:border-gray-300 hover:shadow-xl'
+                    }`}
+                  >
+                    {selectedRoom?.id === room.id && (
+                      <div
+                        className="absolute top-3 left-3 sm:top-4 sm:left-4 z-10 bg-gradient-to-r from-blue-500 to-purple-600 text-white px-2 py-1 sm:px-3 sm:py-1 rounded-full text-xs sm:text-sm font-medium"
+                      >
+                        <Check size={12} className="inline mr-1 sm:w-4 sm:h-4" />
+                        Selected
+                      </div>
+                    )}
+                    
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        toggleSavedRoom(room.id);
+                      }}
+                      className={`absolute top-3 right-3 sm:top-4 sm:right-4 z-10 p-2 rounded-full backdrop-blur-sm transition-all hover:scale-110 ${
+                        savedRooms.has(room.id) 
+                          ? 'bg-red-500 text-white' 
+                          : 'bg-white/80 text-gray-600 hover:bg-white'
+                      }`}
+                    >
+                      <Heart size={14} className={`sm:w-4 sm:h-4 ${savedRooms.has(room.id) ? 'fill-current' : ''}`} />
+                    </button>
+
+                    <div className="flex flex-col">
+                      <div className="relative h-48 sm:h-64 lg:h-auto lg:w-80 overflow-hidden">
+                        <img
+                          src={room.image}
+                          alt={room.name}
+                          className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                        />
+                        <div className="absolute bottom-3 left-3 sm:bottom-4 sm:left-4 flex gap-1 sm:gap-2">
+                          {room.badges.map((badge, idx) => (
+                            <span
+                              key={badge}
+                              className={`px-2 py-1 rounded-full text-xs font-medium backdrop-blur-sm ${
+                                badge === 'Popular' ? 'bg-orange-500/90 text-white' :
+                                badge === 'Luxury' ? 'bg-purple-500/90 text-white' :
+                                badge === 'Best Value' ? 'bg-green-500/90 text-white' :
+                                'bg-blue-500/90 text-white'
+                              }`}
+                            >
+                              {badge}
+                            </span>
+                          ))}
+                        </div>
+                      </div>
+                      
+                      <div className="flex-1 p-4 sm:p-6">
+                        <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start mb-4 gap-3 sm:gap-0">
+                          <div className="flex-1">
+                            <h3 className={`text-xl sm:text-2xl font-bold mb-2 ${darkMode ? 'text-white' : 'text-gray-900'}`}>
+                              {room.name}
+                            </h3>
+                            <p className={`text-sm mb-3 line-clamp-2 ${darkMode ? 'text-gray-300' : 'text-gray-600'}`}>
+                              {room.description}
+                            </p>
+                            <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4 mb-4">
+                              <div className="flex items-center gap-1">
+                                <Star className="w-4 h-4 sm:w-5 sm:h-5 text-yellow-400 fill-current" />
+                                <span className={`font-semibold text-sm sm:text-base ${darkMode ? 'text-white' : 'text-gray-900'}`}>
+                                  {room.rating}
+                                </span>
+                                <span className={`text-xs sm:text-sm ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>
+                                  ({room.reviews} reviews)
+                                </span>
+                              </div>
+                              <div className={`text-xs sm:text-sm ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>
+                                {room.size} • Up to {room.maxGuests} guests
+                              </div>
+                            </div>
+                          </div>
+                          <div className="text-right sm:text-right">
+                            <div className="flex items-center justify-end gap-2 mb-1">
+                              <span className={`text-sm sm:text-lg line-through ${darkMode ? 'text-gray-500' : 'text-gray-400'}`}>
+                                ${room.originalPrice}
+                              </span>
+                              <span className="px-2 py-1 bg-red-100 text-red-600 text-xs font-medium rounded-full">
+                                25% OFF
+                              </span>
+                            </div>
+                            <div className="text-2xl sm:text-3xl font-bold text-blue-600 mb-1">
+                              ${room.price}
+                            </div>
+                            <div className={`text-xs sm:text-sm ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>
+                              per night
+                            </div>
                           </div>
                         </div>
                         
-                        <div className="flex-1 p-6">
-                          <div className="flex justify-between items-start mb-4">
-                            <div>
-                              <h3 className={`text-2xl font-bold mb-2 ${darkMode ? 'text-white' : 'text-gray-900'}`}>
-                                {room.name}
-                              </h3>
-                              <p className={`text-sm mb-3 ${darkMode ? 'text-gray-300' : 'text-gray-600'}`}>
-                                {room.description}
-                              </p>
-                              <div className="flex items-center gap-4 mb-4">
-                                <div className="flex items-center gap-1">
-                                  <Star className="w-5 h-5 text-yellow-400 fill-current" />
-                                  <span className={`font-semibold ${darkMode ? 'text-white' : 'text-gray-900'}`}>
-                                    {room.rating}
-                                  </span>
-                                  <span className={`text-sm ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>
-                                    ({room.reviews} reviews)
-                                  </span>
-                                </div>
-                                <div className={`text-sm ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>
-                                  {room.size} • Up to {room.maxGuests} guests
-                                </div>
-                              </div>
-                            </div>
-                            <div className="text-right">
-                              <div className="flex items-center gap-2 mb-1">
-                                <span className={`text-lg line-through ${darkMode ? 'text-gray-500' : 'text-gray-400'}`}>
-                                  ${room.originalPrice}
-                                </span>
-                                <span className="px-2 py-1 bg-red-100 text-red-600 text-xs font-medium rounded-full">
-                                  25% OFF
-                                </span>
-                              </div>
-                              <div className="text-3xl font-bold text-blue-600 mb-1">
-                                ${room.price}
-                              </div>
-                              <div className={`text-sm ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>
-                                per night
-                              </div>
-                            </div>
-                          </div>
-                          
-                          <div className="grid grid-cols-2 lg:grid-cols-3 gap-3 mb-4">
-                            {room.amenities.map((amenity, idx) => (
-                              <motion.div
-                                key={amenity}
-                                initial={{ opacity: 0, scale: 0.8 }}
-                                animate={{ opacity: 1, scale: 1 }}
-                                transition={{ delay: 0.4 + idx * 0.05 }}
-                                className={`flex items-center gap-2 px-3 py-2 rounded-lg text-sm ${
-                                  darkMode ? 'bg-gray-700 text-gray-300' : 'bg-gray-100 text-gray-700'
-                                }`}
-                              >
-                                {amenity === 'WiFi' || amenity === 'Free WiFi' || amenity === 'Premium WiFi' ? <Wifi size={14} /> :
-                                 amenity === 'Parking' ? <Car size={14} /> :
-                                 amenity === 'Coffee Maker' ? <Coffee size={14} /> :
-                                 amenity === 'TV' ? <Tv size={14} /> :
-                                 <Check size={14} />}
-                                {amenity}
-                              </motion.div>
-                            ))}
-                          </div>
-
-                          <div className="flex items-center justify-between">
-                            <motion.button
-                              className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-all ${
-                                darkMode ? 'text-gray-400 hover:text-white hover:bg-gray-700' : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'
+                        <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 sm:gap-3 mb-4">
+                          {room.amenities.map((amenity, idx) => (
+                            <div
+                              key={amenity}
+                              className={`flex items-center gap-2 px-2 py-1 sm:px-3 sm:py-2 rounded-lg text-xs sm:text-sm ${
+                                darkMode ? 'bg-gray-700 text-gray-300' : 'bg-gray-100 text-gray-700'
                               }`}
-                              whileHover={{ scale: 1.05 }}
-                              whileTap={{ scale: 0.95 }}
                             >
-                              <Share2 size={16} />
-                              Share
-                            </motion.button>
-                            
-                            {calculateNights() > 0 && (
-                              <motion.div
-                                initial={{ opacity: 0, x: 20 }}
-                                animate={{ opacity: 1, x: 0 }}
-                                className={`text-right ${darkMode ? 'text-gray-300' : 'text-gray-600'}`}
-                              >
-                                <div className="text-sm">Total for {calculateNights()} nights</div>
-                                <div className="text-xl font-bold text-blue-600">
-                                  ${room.price * calculateNights()}
-                                </div>
-                              </motion.div>
-                            )}
-                          </div>
+                              {amenity === 'WiFi' || amenity === 'Free WiFi' || amenity === 'Premium WiFi' ? <Wifi size={12} className="sm:w-4 sm:h-4" /> :
+                               amenity === 'Parking' ? <Car size={12} className="sm:w-4 sm:h-4" /> :
+                               amenity === 'Coffee Maker' ? <Coffee size={12} className="sm:w-4 sm:h-4" /> :
+                               amenity === 'TV' ? <Tv size={12} className="sm:w-4 sm:h-4" /> :
+                               <Check size={12} className="sm:w-4 sm:h-4" />}
+                              <span className="truncate">{amenity}</span>
+                            </div>
+                          ))}
+                        </div>
+
+                        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+                          <button
+                            className={`flex items-center justify-center sm:justify-start gap-2 px-4 py-2 rounded-lg transition-all hover:scale-105 ${
+                              darkMode ? 'text-gray-400 hover:text-white hover:bg-gray-700' : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'
+                            }`}
+                          >
+                            <Share2 size={14} className="sm:w-4 sm:h-4" />
+                            Share
+                          </button>
+                          
+                          {calculateNights() > 0 && (
+                            <div className={`text-center sm:text-right ${darkMode ? 'text-gray-300' : 'text-gray-600'}`}>
+                              <div className="text-xs sm:text-sm">Total for {calculateNights()} nights</div>
+                              <div className="text-lg sm:text-xl font-bold text-blue-600">
+                                ${room.price * calculateNights()}
+                              </div>
+                            </div>
+                          )}
                         </div>
                       </div>
-                    </motion.div>
-                  ))}
-                </div>
-              </motion.div>
-            )}
-
-            {!isLoading && currentStep === 3 && (
-              <motion.div
-                key="step3"
-                variants={stepVariants}
-                initial="enter"
-                animate="center"
-                exit="exit"
-                transition={{ duration: 0.4, type: "spring" }}
-              >
-                <motion.h2 
-                  className={`text-3xl font-bold mb-8 flex items-center ${darkMode ? 'text-white' : 'text-gray-900'}`}
-                  initial={{ opacity: 0, x: -20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                >
-                  <Users className="mr-4 text-blue-500" size={32} />
-                  Guest Information
-                </motion.h2>
-                
-                <div className="grid lg:grid-cols-2 gap-8">
-                  <motion.div
-                    initial={{ opacity: 0, x: -20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: 0.1 }}
-                  >
-                    <h3 className={`text-xl font-semibold mb-6 ${darkMode ? 'text-white' : 'text-gray-900'}`}>
-                      Contact Details
-                    </h3>
-                    <div className="space-y-4">
-                      {[
-                        { key: 'firstName', label: 'First Name', type: 'text', icon: User },
-                        { key: 'lastName', label: 'Last Name', type: 'text', icon: User },
-                        { key: 'email', label: 'Email Address', type: 'email', icon: Mail },
-                        { key: 'phone', label: 'Phone Number', type: 'tel', icon: Phone }
-                      ].map(({ key, label, type, icon: Icon }, index) => (
-                        <motion.div
-                          key={key}
-                          initial={{ opacity: 0, y: 20 }}
-                          animate={{ opacity: 1, y: 0 }}
-                          transition={{ delay: 0.2 + index * 0.1 }}
-                        >
-                          <label className={`block text-sm font-semibold mb-2 ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>
-                            {label}
-                          </label>
-                          <div className="relative">
-                            <Icon className={`absolute left-4 top-1/2 transform -translate-y-1/2 ${
-                              darkMode ? 'text-gray-400' : 'text-gray-500'
-                            }`} size={18} />
-                            <motion.input
-                              type={type}
-                              value={personalInfo[key]}
-                              onChange={(e) => setPersonalInfo(prev => ({ ...prev, [key]: e.target.value }))}
-                              className={`w-full pl-12 pr-4 py-4 border-2 rounded-xl transition-all duration-200 ${
-                                darkMode 
-                                  ? 'bg-gray-700 border-gray-600 text-white focus:border-blue-500 focus:bg-gray-600' 
-                                  : 'bg-white border-gray-200 text-gray-900 focus:border-blue-500 focus:bg-blue-50'
-                              } focus:ring-2 focus:ring-blue-500/20`}
-                              placeholder={`Enter your ${label.toLowerCase()}`}
-                              whileFocus={{ scale: 1.02 }}
-                            />
-                          </div>
-                        </motion.div>
-                      ))}
                     </div>
-                  </motion.div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
 
-                  <motion.div
-                    initial={{ opacity: 0, x: 20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: 0.3 }}
-                  >
-                    <h3 className={`text-xl font-semibold mb-6 ${darkMode ? 'text-white' : 'text-gray-900'}`}>
-                      Special Requests
-                    </h3>
-                    <motion.div
-                      initial={{ opacity: 0, y: 20 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: 0.4 }}
-                    >
-                      <label className={`block text-sm font-semibold mb-2 ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>
-                        Additional Notes
-                      </label>
-                      <motion.textarea
-                        value={personalInfo.specialRequests}
-                        onChange={(e) => setPersonalInfo(prev => ({ ...prev, specialRequests: e.target.value }))}
-                        rows={4}
-                        className={`w-full p-4 border-2 rounded-xl transition-all duration-200 resize-none ${
-                          darkMode 
-                            ? 'bg-gray-700 border-gray-600 text-white focus:border-blue-500 focus:bg-gray-600' 
-                            : 'bg-white border-gray-200 text-gray-900 focus:border-blue-500 focus:bg-blue-50'
-                        } focus:ring-2 focus:ring-blue-500/20`}
-                        placeholder="Any special requests or preferences..."
-                        whileFocus={{ scale: 1.02 }}
-                      />
-                    </motion.div>
-
-                    <motion.div
-                      initial={{ opacity: 0, y: 20 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: 0.5 }}
-                      className="mt-6"
-                    >
-                      <h4 className={`text-lg font-semibold mb-4 ${darkMode ? 'text-white' : 'text-gray-900'}`}>
-                        Booking Summary
-                      </h4>
-                      <div className={`p-4 rounded-xl ${darkMode ? 'bg-gray-700' : 'bg-gray-50'}`}>
-                        {selectedRoom && (
-                          <div className="space-y-3">
-                            <div className="flex justify-between">
-                              <span className={darkMode ? 'text-gray-300' : 'text-gray-600'}>Room:</span>
-                              <span className={`font-medium ${darkMode ? 'text-white' : 'text-gray-900'}`}>
-                                {selectedRoom.name}
-                              </span>
-                            </div>
-                            <div className="flex justify-between">
-                              <span className={darkMode ? 'text-gray-300' : 'text-gray-600'}>Dates:</span>
-                              <span className={`font-medium ${darkMode ? 'text-white' : 'text-gray-900'}`}>
-                                {formatDate(selectedDates.checkIn)} - {formatDate(selectedDates.checkOut)}
-                              </span>
-                            </div>
-                            <div className="flex justify-between">
-                              <span className={darkMode ? 'text-gray-300' : 'text-gray-600'}>Guests:</span>
-                              <span className={`font-medium ${darkMode ? 'text-white' : 'text-gray-900'}`}>
-                                {guests.adults} adults, {guests.children} children
-                              </span>
-                            </div>
-                            <div className="flex justify-between">
-                              <span className={darkMode ? 'text-gray-300' : 'text-gray-600'}>Nights:</span>
-                              <span className={`font-medium ${darkMode ? 'text-white' : 'text-gray-900'}`}>
-                                {calculateNights()}
-                              </span>
-                            </div>
-                            <div className="border-t pt-3 mt-3">
-                              <div className="flex justify-between text-lg font-bold">
-                                <span className={darkMode ? 'text-white' : 'text-gray-900'}>Total:</span>
-                                <span className="text-blue-600">${calculateSubtotal()}</span>
-                              </div>
-                            </div>
-                          </div>
-                        )}
-                      </div>
-                    </motion.div>
-                  </motion.div>
-                </div>
-              </motion.div>
-            )}
-
-            {!isLoading && currentStep === 4 && (
-              <motion.div
-                key="step4"
-                variants={stepVariants}
-                initial="enter"
-                animate="center"
-                exit="exit"
-                transition={{ duration: 0.4, type: "spring" }}
-              >
-                <motion.h2 
-                  className={`text-3xl font-bold mb-8 flex items-center ${darkMode ? 'text-white' : 'text-gray-900'}`}
-                  initial={{ opacity: 0, x: -20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                >
-                  <CreditCard className="mr-4 text-blue-500" size={32} />
-                  Secure Payment
-                </motion.h2>
-                
-                <div className="grid lg:grid-cols-2 gap-8">
-                  <motion.div
-                    initial={{ opacity: 0, x: -20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: 0.1 }}
-                  >
-                    <div className="flex items-center gap-3 mb-6">
-                      <Shield className="text-green-500" size={20} />
-                      <span className={`text-sm font-medium ${darkMode ? 'text-gray-300' : 'text-gray-600'}`}>
-                        Your payment is secured with 256-bit SSL encryption
-                      </span>
-                    </div>
-                    
-                    <div className="space-y-4">
-                      {[
-                        { key: 'cardNumber', label: 'Card Number', type: 'text', placeholder: '1234 5678 9012 3456' },
-                        { key: 'cardName', label: 'Cardholder Name', type: 'text', placeholder: 'John Doe' }
-                      ].map(({ key, label, type, placeholder }, index) => (
-                        <motion.div
-                          key={key}
-                          initial={{ opacity: 0, y: 20 }}
-                          animate={{ opacity: 1, y: 0 }}
-                          transition={{ delay: 0.2 + index * 0.1 }}
-                        >
-                          <label className={`block text-sm font-semibold mb-2 ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>
-                            {label}
-                          </label>
-                          <motion.input
+          {!isLoading && currentStep === 3 && (
+            <div key="step3">
+              <h2 className={`text-xl sm:text-3xl font-bold mb-6 sm:mb-8 flex items-center ${darkMode ? 'text-white' : 'text-gray-900'}`}>
+                <Users className="mr-2 sm:mr-4 text-blue-500" size={24} />
+                Guest Information
+              </h2>
+              
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8">
+                <div>
+                  <h3 className={`text-lg sm:text-xl font-semibold mb-4 sm:mb-6 ${darkMode ? 'text-white' : 'text-gray-900'}`}>
+                    Contact Details
+                  </h3>
+                  <div className="space-y-4">
+                    {[
+                      { key: 'firstName', label: 'First Name', type: 'text', icon: User },
+                      { key: 'lastName', label: 'Last Name', type: 'text', icon: User },
+                      { key: 'email', label: 'Email Address', type: 'email', icon: Mail },
+                      { key: 'phone', label: 'Phone Number', type: 'tel', icon: Phone }
+                    ].map(({ key, label, type, icon: Icon }, index) => (
+                      <div key={key}>
+                        <label className={`block text-sm font-semibold mb-2 ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>
+                          {label}
+                        </label>
+                        <div className="relative">
+                          <Icon className={`absolute left-3 sm:left-4 top-1/2 transform -translate-y-1/2 ${
+                            darkMode ? 'text-gray-400' : 'text-gray-500'
+                          }`} size={16} />
+                          <input
                             type={type}
+                            value={personalInfo[key]}
+                            onChange={(e) => setPersonalInfo(prev => ({ ...prev, [key]: e.target.value }))}
+                            className={`w-full pl-10 sm:pl-12 pr-3 sm:pr-4 py-3 sm:py-4 border-2 rounded-xl transition-all duration-200 focus:scale-[1.02] ${
+                              darkMode 
+                                ? 'bg-gray-700 border-gray-600 text-white focus:border-blue-500 focus:bg-gray-600' 
+                                : 'bg-white border-gray-200 text-gray-900 focus:border-blue-500 focus:bg-blue-50'
+                            } focus:ring-2 focus:ring-blue-500/20`}
+                            placeholder={`Enter your ${label.toLowerCase()}`}
+                          />
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                <div>
+                  <h3 className={`text-lg sm:text-xl font-semibold mb-4 sm:mb-6 ${darkMode ? 'text-white' : 'text-gray-900'}`}>
+                    Special Requests
+                  </h3>
+                  <div className="mb-6">
+                    <label className={`block text-sm font-semibold mb-2 ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>
+                      Additional Notes
+                    </label>
+                    <textarea
+                      value={personalInfo.specialRequests}
+                      onChange={(e) => setPersonalInfo(prev => ({ ...prev, specialRequests: e.target.value }))}
+                      rows={4}
+                      className={`w-full p-3 sm:p-4 border-2 rounded-xl transition-all duration-200 resize-none focus:scale-[1.02] ${
+                        darkMode 
+                          ? 'bg-gray-700 border-gray-600 text-white focus:border-blue-500 focus:bg-gray-600' 
+                          : 'bg-white border-gray-200 text-gray-900 focus:border-blue-500 focus:bg-blue-50'
+                      } focus:ring-2 focus:ring-blue-500/20`}
+                      placeholder="Any special requests or preferences..."
+                    />
+                  </div>
+
+                  <div>
+                    <h4 className={`text-base sm:text-lg font-semibold mb-3 sm:mb-4 ${darkMode ? 'text-white' : 'text-gray-900'}`}>
+                      Booking Summary
+                    </h4>
+                    <div className={`p-3 sm:p-4 rounded-xl ${darkMode ? 'bg-gray-700' : 'bg-gray-50'}`}>
+                      {selectedRoom && (
+                        <div className="space-y-2 sm:space-y-3">
+                          <div className="flex justify-between items-start">
+                            <span className={`text-sm ${darkMode ? 'text-gray-300' : 'text-gray-600'}`}>Room:</span>
+                            <span className={`font-medium text-sm text-right ${darkMode ? 'text-white' : 'text-gray-900'}`}>
+                              {selectedRoom.name}
+                            </span>
+                          </div>
+                          <div className="flex justify-between items-start">
+                            <span className={`text-sm ${darkMode ? 'text-gray-300' : 'text-gray-600'}`}>Dates:</span>
+                            <span className={`font-medium text-sm text-right ${darkMode ? 'text-white' : 'text-gray-900'}`}>
+                              {formatDate(selectedDates.checkIn)} - {formatDate(selectedDates.checkOut)}
+                            </span>
+                          </div>
+                          <div className="flex justify-between">
+                            <span className={`text-sm ${darkMode ? 'text-gray-300' : 'text-gray-600'}`}>Guests:</span>
+                            <span className={`font-medium text-sm ${darkMode ? 'text-white' : 'text-gray-900'}`}>
+                              {guests.adults} adults, {guests.children} children
+                            </span>
+                          </div>
+                          <div className="flex justify-between">
+                            <span className={`text-sm ${darkMode ? 'text-gray-300' : 'text-gray-600'}`}>Nights:</span>
+                            <span className={`font-medium text-sm ${darkMode ? 'text-white' : 'text-gray-900'}`}>
+                              {calculateNights()}
+                            </span>
+                          </div>
+                          <div className="border-t pt-2 sm:pt-3 mt-2 sm:mt-3">
+                            <div className="flex justify-between text-base sm:text-lg font-bold">
+                              <span className={darkMode ? 'text-white' : 'text-gray-900'}>Total:</span>
+                              <span className="text-blue-600">${calculateSubtotal()}</span>
+                            </div>
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {!isLoading && currentStep === 4 && (
+            <div key="step4">
+              <h2 className={`text-xl sm:text-3xl font-bold mb-6 sm:mb-8 flex items-center ${darkMode ? 'text-white' : 'text-gray-900'}`}>
+                <CreditCard className="mr-2 sm:mr-4 text-blue-500" size={24} />
+                Secure Payment
+              </h2>
+              
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8">
+                <div>
+                  <div className="flex items-center gap-2 sm:gap-3 mb-4 sm:mb-6">
+                    <Shield className="text-green-500 sm:w-5 sm:h-5" size={16} />
+                    <span className={`text-xs sm:text-sm font-medium ${darkMode ? 'text-gray-300' : 'text-gray-600'}`}>
+                      Your payment is secured with 256-bit SSL encryption
+                    </span>
+                  </div>
+                  
+                  <div className="space-y-4">
+                    {[
+                      { key: 'cardNumber', label: 'Card Number', type: 'text', placeholder: '1234 5678 9012 3456' },
+                      { key: 'cardName', label: 'Cardholder Name', type: 'text', placeholder: 'John Doe' }
+                    ].map(({ key, label, type, placeholder }, index) => (
+                      <div key={key}>
+                        <label className={`block text-sm font-semibold mb-2 ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>
+                          {label}
+                        </label>
+                        <input
+                          type={type}
+                          value={paymentInfo[key]}
+                          onChange={(e) => setPaymentInfo(prev => ({ ...prev, [key]: e.target.value }))}
+                          className={`w-full p-3 sm:p-4 border-2 rounded-xl transition-all duration-200 focus:scale-[1.02] ${
+                            darkMode 
+                              ? 'bg-gray-700 border-gray-600 text-white focus:border-blue-500 focus:bg-gray-600' 
+                              : 'bg-white border-gray-200 text-gray-900 focus:border-blue-500 focus:bg-blue-50'
+                          } focus:ring-2 focus:ring-blue-500/20`}
+                          placeholder={placeholder}
+                        />
+                      </div>
+                    ))}
+                    
+                    <div className="grid grid-cols-2 gap-3 sm:gap-4">
+                      {[
+                        { key: 'expiryDate', label: 'Expiry Date', placeholder: 'MM/YY' },
+                        { key: 'cvv', label: 'CVV', placeholder: '123' }
+                      ].map(({ key, label, placeholder }, index) => (
+                        <div key={key}>
+                          <label className={`block text-sm font-semibold mb-2 ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>
+                            {label}
+                          </label>
+                          <input
+                            type="text"
                             value={paymentInfo[key]}
                             onChange={(e) => setPaymentInfo(prev => ({ ...prev, [key]: e.target.value }))}
-                            className={`w-full p-4 border-2 rounded-xl transition-all duration-200 ${
+                            className={`w-full p-3 sm:p-4 border-2 rounded-xl transition-all duration-200 focus:scale-[1.02] ${
                               darkMode 
                                 ? 'bg-gray-700 border-gray-600 text-white focus:border-blue-500 focus:bg-gray-600' 
                                 : 'bg-white border-gray-200 text-gray-900 focus:border-blue-500 focus:bg-blue-50'
                             } focus:ring-2 focus:ring-blue-500/20`}
                             placeholder={placeholder}
-                            whileFocus={{ scale: 1.02 }}
                           />
-                        </motion.div>
-                      ))}
-                      
-                      <div className="grid grid-cols-2 gap-4">
-                        {[
-                          { key: 'expiryDate', label: 'Expiry Date', placeholder: 'MM/YY' },
-                          { key: 'cvv', label: 'CVV', placeholder: '123' }
-                        ].map(({ key, label, placeholder }, index) => (
-                          <motion.div
-                            key={key}
-                            initial={{ opacity: 0, y: 20 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            transition={{ delay: 0.4 + index * 0.1 }}
-                          >
-                            <label className={`block text-sm font-semibold mb-2 ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>
-                              {label}
-                            </label>
-                            <motion.input
-                              type="text"
-                              value={paymentInfo[key]}
-                              onChange={(e) => setPaymentInfo(prev => ({ ...prev, [key]: e.target.value }))}
-                              className={`w-full p-4 border-2 rounded-xl transition-all duration-200 ${
-                                darkMode 
-                                  ? 'bg-gray-700 border-gray-600 text-white focus:border-blue-500 focus:bg-gray-600' 
-                                  : 'bg-white border-gray-200 text-gray-900 focus:border-blue-500 focus:bg-blue-50'
-                              } focus:ring-2 focus:ring-blue-500/20`}
-                              placeholder={placeholder}
-                              whileFocus={{ scale: 1.02 }}
-                            />
-                          </motion.div>
-                        ))}
-                      </div>
-                    </div>
-                  </motion.div>
-
-                  <motion.div
-                    initial={{ opacity: 0, x: 20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: 0.3 }}
-                  >
-                    <div className={`p-6 rounded-2xl ${darkMode ? 'bg-gray-700' : 'bg-gray-50'}`}>
-                      <h3 className={`text-xl font-semibold mb-6 ${darkMode ? 'text-white' : 'text-gray-900'}`}>
-                        Booking Summary
-                      </h3>
-                      
-                      {selectedRoom && (
-                        <div className="space-y-4">
-                          <div className="flex gap-4">
-                            <img
-                              src={selectedRoom.image}
-                              alt={selectedRoom.name}
-                              className="w-20 h-16 object-cover rounded-lg"
-                            />
-                            <div>
-                              <h4 className={`font-semibold ${darkMode ? 'text-white' : 'text-gray-900'}`}>
-                                {selectedRoom.name}
-                              </h4>
-                              <p className={`text-sm ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>
-                                {formatDate(selectedDates.checkIn)} - {formatDate(selectedDates.checkOut)}
-                              </p>
-                            </div>
-                          </div>
-                          
-                          <div className="space-y-2 text-sm">
-                            <div className="flex justify-between">
-                              <span className={darkMode ? 'text-gray-300' : 'text-gray-600'}>
-                                ${selectedRoom.price} x {calculateNights()} nights
-                              </span>
-                              <span className={`font-medium ${darkMode ? 'text-white' : 'text-gray-900'}`}>
-                                ${calculateSubtotal()}
-                              </span>
-                            </div>
-                            <div className="flex justify-between">
-                              <span className={darkMode ? 'text-gray-300' : 'text-gray-600'}>
-                                Taxes & Fees
-                              </span>
-                              <span className={`font-medium ${darkMode ? 'text-white' : 'text-gray-900'}`}>
-                                ${calculateTaxes()}
-                              </span>
-                            </div>
-                            <div className="flex justify-between">
-                              <span className={darkMode ? 'text-gray-300' : 'text-gray-600'}>
-                                Discount
-                              </span>
-                              <span className="text-green-500 font-medium">
-                                -${selectedRoom.originalPrice * calculateNights() - calculateSubtotal()}
-                              </span>
-                            </div>
-                          </div>
-                          
-                          <div className="border-t pt-4 mt-4">
-                            <div className="flex justify-between text-lg font-bold">
-                              <span className={darkMode ? 'text-white' : 'text-gray-900'}>Total</span>
-                              <span className="text-blue-600">${calculateTotal()}</span>
-                            </div>
-                          </div>
-                          
-                          <motion.div
-                            className={`mt-6 p-4 rounded-xl flex items-center gap-3 ${
-                              darkMode ? 'bg-gray-600' : 'bg-blue-50'
-                            }`}
-                            initial={{ opacity: 0, y: 20 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            transition={{ delay: 0.4 }}
-                          >
-                            <Gift className="text-blue-500" size={20} />
-                            <div>
-                              <p className={`text-sm font-medium ${darkMode ? 'text-white' : 'text-gray-900'}`}>
-                                You're saving ${selectedRoom.originalPrice * calculateNights() - calculateSubtotal()}
-                              </p>
-                              <p className={`text-xs ${darkMode ? 'text-gray-300' : 'text-gray-600'}`}>
-                                Special discount applied to your booking
-                              </p>
-                            </div>
-                          </motion.div>
                         </div>
-                      )}
+                      ))}
                     </div>
-                    
-                    <motion.div
-                      className={`mt-6 p-4 rounded-xl ${
-                        darkMode ? 'bg-gray-700' : 'bg-gray-100'
-                      }`}
-                      initial={{ opacity: 0, y: 20 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: 0.5 }}
-                    >
-                      <label className="flex items-center gap-3 cursor-pointer">
-                        <input
-                          type="checkbox"
-                          className="w-5 h-5 rounded border-2 border-gray-300 focus:ring-blue-500"
-                        />
-                        <span className={`text-sm ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>
-                          I agree to the terms and conditions and privacy policy
-                        </span>
-                      </label>
-                    </motion.div>
-                  </motion.div>
+                  </div>
                 </div>
-              </motion.div>
-            )}
 
-            {!isLoading && currentStep === 5 && (
-              <motion.div
-                key="step5"
-                variants={stepVariants}
-                initial="enter"
-                animate="center"
-                exit="exit"
-                transition={{ duration: 0.4, type: "spring" }}
-                className="text-center py-12"
-              >
-                <motion.div
-                  className="w-24 h-24 bg-gradient-to-r from-green-400 to-blue-500 rounded-full flex items-center justify-center mx-auto mb-8"
-                  initial={{ scale: 0, rotate: -180 }}
-                  animate={{ scale: 1, rotate: 0 }}
-                  transition={{ type: "spring", stiffness: 300 }}
-                >
-                  <Check className="text-white" size={48} />
-                </motion.div>
-                
-                <motion.h2 
-                  className={`text-4xl font-bold mb-4 ${darkMode ? 'text-white' : 'text-gray-900'}`}
-                  initial={{ opacity: 0, y: -20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.2 }}
-                >
-                  Booking Confirmed!
-                </motion.h2>
-                
-                <motion.p
-                  className={`text-xl mb-8 ${darkMode ? 'text-gray-300' : 'text-gray-600'}`}
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ delay: 0.4 }}
-                >
-                  Thank you for choosing LuxeStay
-                </motion.p>
-                
-                <motion.div
-                  className={`p-6 rounded-2xl max-w-md mx-auto mb-8 text-left ${
-                    darkMode ? 'bg-gray-700' : 'bg-gray-50'
-                  }`}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.6 }}
-                >
-                  <div className="flex items-center gap-3 mb-4">
-                    <Award className="text-yellow-500" size={24} />
-                    <h3 className={`text-xl font-semibold ${darkMode ? 'text-white' : 'text-gray-900'}`}>
-                      Booking Details
+                <div>
+                  <div className={`p-4 sm:p-6 rounded-xl sm:rounded-2xl ${darkMode ? 'bg-gray-700' : 'bg-gray-50'}`}>
+                    <h3 className={`text-lg sm:text-xl font-semibold mb-4 sm:mb-6 ${darkMode ? 'text-white' : 'text-gray-900'}`}>
+                      Booking Summary
                     </h3>
+                    
+                    {selectedRoom && (
+                      <div className="space-y-3 sm:space-y-4">
+                        <div className="flex gap-3 sm:gap-4">
+                          <img
+                            src={selectedRoom.image}
+                            alt={selectedRoom.name}
+                            className="w-16 h-12 sm:w-20 sm:h-16 object-cover rounded-lg"
+                          />
+                          <div className="flex-1">
+                            <h4 className={`font-semibold text-sm sm:text-base ${darkMode ? 'text-white' : 'text-gray-900'}`}>
+                              {selectedRoom.name}
+                            </h4>
+                            <p className={`text-xs sm:text-sm ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>
+                              {formatDate(selectedDates.checkIn)} - {formatDate(selectedDates.checkOut)}
+                            </p>
+                          </div>
+                        </div>
+                        
+                        <div className="space-y-2 text-sm">
+                          <div className="flex justify-between">
+                            <span className={darkMode ? 'text-gray-300' : 'text-gray-600'}>
+                              ${selectedRoom.price} x {calculateNights()} nights
+                            </span>
+                            <span className={`font-medium ${darkMode ? 'text-white' : 'text-gray-900'}`}>
+                              ${calculateSubtotal()}
+                            </span>
+                          </div>
+                          <div className="flex justify-between">
+                            <span className={darkMode ? 'text-gray-300' : 'text-gray-600'}>
+                              Taxes & Fees
+                            </span>
+                            <span className={`font-medium ${darkMode ? 'text-white' : 'text-gray-900'}`}>
+                              ${calculateTaxes()}
+                            </span>
+                          </div>
+                          <div className="flex justify-between">
+                            <span className={darkMode ? 'text-gray-300' : 'text-gray-600'}>
+                              Discount
+                            </span>
+                            <span className="text-green-500 font-medium">
+                              -${selectedRoom.originalPrice * calculateNights() - calculateSubtotal()}
+                            </span>
+                          </div>
+                        </div>
+                        
+                        <div className="border-t pt-3 sm:pt-4 mt-3 sm:mt-4">
+                          <div className="flex justify-between text-base sm:text-lg font-bold">
+                            <span className={darkMode ? 'text-white' : 'text-gray-900'}>Total</span>
+                            <span className="text-blue-600">${calculateTotal()}</span>
+                          </div>
+                        </div>
+                        
+                        <div
+                          className={`mt-4 sm:mt-6 p-3 sm:p-4 rounded-xl flex items-center gap-2 sm:gap-3 ${
+                            darkMode ? 'bg-gray-600' : 'bg-blue-50'
+                          }`}
+                        >
+                          <Gift className="text-blue-500 flex-shrink-0 sm:w-5 sm:h-5" size={16} />
+                          <div>
+                            <p className={`text-xs sm:text-sm font-medium ${darkMode ? 'text-white' : 'text-gray-900'}`}>
+                              You're saving ${selectedRoom.originalPrice * calculateNights() - calculateSubtotal()}
+                            </p>
+                            <p className={`text-xs ${darkMode ? 'text-gray-300' : 'text-gray-600'}`}>
+                              Special discount applied to your booking
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                    )}
                   </div>
                   
-                  <div className="space-y-3">
-                    <div className="flex justify-between">
-                      <span className={darkMode ? 'text-gray-300' : 'text-gray-600'}>Confirmation #:</span>
-                      <span className={`font-mono font-medium ${darkMode ? 'text-white' : 'text-gray-900'}`}>
-                        {Math.random().toString(36).substring(2, 10).toUpperCase()}
-                      </span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className={darkMode ? 'text-gray-300' : 'text-gray-600'}>Room:</span>
-                      <span className={`font-medium ${darkMode ? 'text-white' : 'text-gray-900'}`}>
-                        {selectedRoom?.name}
-                      </span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className={darkMode ? 'text-gray-300' : 'text-gray-600'}>Dates:</span>
-                      <span className={`font-medium ${darkMode ? 'text-white' : 'text-gray-900'}`}>
-                        {formatDate(selectedDates.checkIn)} - {formatDate(selectedDates.checkOut)}
-                      </span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className={darkMode ? 'text-gray-300' : 'text-gray-600'}>Guests:</span>
-                      <span className={`font-medium ${darkMode ? 'text-white' : 'text-gray-900'}`}>
-                        {guests.adults} adults, {guests.children} children
-                      </span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className={darkMode ? 'text-gray-300' : 'text-gray-600'}>Total Paid:</span>
-                      <span className="text-green-500 font-bold">${calculateTotal()}</span>
-                    </div>
-                  </div>
-                </motion.div>
-                
-                <motion.div
-                  className="flex flex-col sm:flex-row justify-center gap-4"
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.8 }}
-                >
-                  <motion.button
-                    className={`px-6 py-4 rounded-xl transition-all flex items-center gap-2 ${
-                      darkMode ? 'bg-gray-700 text-white hover:bg-gray-600' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                  <div
+                    className={`mt-4 sm:mt-6 p-3 sm:p-4 rounded-xl ${
+                      darkMode ? 'bg-gray-700' : 'bg-gray-100'
                     }`}
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
                   >
-                    <Share2 size={18} />
-                    Share Booking
-                  </motion.button>
-                  <motion.button
-                    className="px-6 py-4 rounded-xl bg-gradient-to-r from-blue-500 to-purple-600 text-white transition-all flex items-center gap-2"
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
-                  >
-                    <Home size={18} />
-                    Back to Home
-                  </motion.button>
-                </motion.div>
-              </motion.div>
-            )}
-          </AnimatePresence>
+                    <label className="flex items-start gap-3 cursor-pointer">
+                      <input
+                        type="checkbox"
+                        className="w-4 h-4 sm:w-5 sm:h-5 rounded border-2 border-gray-300 focus:ring-blue-500 mt-0.5 flex-shrink-0"
+                      />
+                      <span className={`text-xs sm:text-sm ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>
+                        I agree to the terms and conditions and privacy policy
+                      </span>
+                    </label>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
 
-          {/* Navigation Buttons */}
+          {!isLoading && currentStep === 5 && (
+            <div key="step5" className="text-center py-8 sm:py-12">
+              <div className="w-16 h-16 sm:w-24 sm:h-24 bg-gradient-to-r from-green-400 to-blue-500 rounded-full flex items-center justify-center mx-auto mb-6 sm:mb-8">
+                <Check className="text-white" size={32} />
+              </div>
+              
+              <h2 className={`text-2xl sm:text-4xl font-bold mb-3 sm:mb-4 ${darkMode ? 'text-white' : 'text-gray-900'}`}>
+                Booking Confirmed!
+              </h2>
+              
+              <p className={`text-lg sm:text-xl mb-6 sm:mb-8 ${darkMode ? 'text-gray-300' : 'text-gray-600'}`}>
+                Thank you for choosing LuxeStay
+              </p>
+              
+              <div
+                className={`p-4 sm:p-6 rounded-xl sm:rounded-2xl max-w-md mx-auto mb-6 sm:mb-8 text-left ${
+                  darkMode ? 'bg-gray-700' : 'bg-gray-50'
+                }`}
+              >
+                <div className="flex items-center gap-2 sm:gap-3 mb-3 sm:mb-4">
+                  <Award className="text-yellow-500" size={20} />
+                  <h3 className={`text-lg sm:text-xl font-semibold ${darkMode ? 'text-white' : 'text-gray-900'}`}>
+                    Booking Details
+                  </h3>
+                </div>
+                
+                <div className="space-y-2 sm:space-y-3">
+                  <div className="flex justify-between items-start">
+                    <span className={`text-sm ${darkMode ? 'text-gray-300' : 'text-gray-600'}`}>Confirmation #:</span>
+                    <span className={`font-mono font-medium text-sm text-right ${darkMode ? 'text-white' : 'text-gray-900'}`}>
+                      {Math.random().toString(36).substring(2, 10).toUpperCase()}
+                    </span>
+                  </div>
+                  <div className="flex justify-between items-start">
+                    <span className={`text-sm ${darkMode ? 'text-gray-300' : 'text-gray-600'}`}>Room:</span>
+                    <span className={`font-medium text-sm text-right ${darkMode ? 'text-white' : 'text-gray-900'}`}>
+                      {selectedRoom?.name}
+                    </span>
+                  </div>
+                  <div className="flex justify-between items-start">
+                    <span className={`text-sm ${darkMode ? 'text-gray-300' : 'text-gray-600'}`}>Dates:</span>
+                    <span className={`font-medium text-sm text-right ${darkMode ? 'text-white' : 'text-gray-900'}`}>
+                      {formatDate(selectedDates.checkIn)} - {formatDate(selectedDates.checkOut)}
+                    </span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className={`text-sm ${darkMode ? 'text-gray-300' : 'text-gray-600'}`}>Guests:</span>
+                    <span className={`font-medium text-sm ${darkMode ? 'text-white' : 'text-gray-900'}`}>
+                      {guests.adults} adults, {guests.children} children
+                    </span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className={`text-sm ${darkMode ? 'text-gray-300' : 'text-gray-600'}`}>Total Paid:</span>
+                    <span className="text-green-500 font-bold text-sm">${calculateTotal()}</span>
+                  </div>
+                </div>
+              </div>
+              
+              <div className="flex flex-col sm:flex-row justify-center gap-3 sm:gap-4">
+                <button
+                  className={`px-4 py-3 sm:px-6 sm:py-4 rounded-xl transition-all hover:scale-105 flex items-center justify-center gap-2 ${
+                    darkMode ? 'bg-gray-700 text-white hover:bg-gray-600' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                  }`}
+                >
+                  <Share2 size={16} />
+                  Share Booking
+                </button>
+                <button
+                  className="px-4 py-3 sm:px-6 sm:py-4 rounded-xl bg-gradient-to-r from-blue-500 to-purple-600 text-white transition-all hover:scale-105 flex items-center justify-center gap-2"
+                >
+                  <Home size={16} />
+                  Back to Home
+                </button>
+              </div>
+            </div>
+          )}
+
+          {/* Navigation Buttons - Mobile Optimized */}
           {currentStep < 5 && !isLoading && (
-            <motion.div
-              className="flex justify-between mt-8"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.3 }}
-            >
-              <motion.button
+            <div className="flex flex-col sm:flex-row justify-between gap-3 sm:gap-0 mt-6 sm:mt-8">
+              <button
                 onClick={prevStep}
                 disabled={currentStep === 1}
-                className={`px-6 py-3 rounded-xl transition-all flex items-center gap-2 ${
+                className={`px-4 py-3 sm:px-6 sm:py-3 rounded-xl transition-all flex items-center justify-center gap-2 order-2 sm:order-1 ${
                   currentStep === 1 
                     ? darkMode ? 'bg-gray-700 text-gray-500 cursor-not-allowed' : 'bg-gray-200 text-gray-400 cursor-not-allowed'
-                    : darkMode ? 'bg-gray-700 text-white hover:bg-gray-600' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                    : darkMode ? 'bg-gray-700 text-white hover:bg-gray-600 hover:scale-105' : 'bg-gray-100 text-gray-700 hover:bg-gray-200 hover:scale-105'
                 }`}
-                whileHover={currentStep > 1 ? { scale: 1.05 } : {}}
-                whileTap={currentStep > 1 ? { scale: 0.95 } : {}}
               >
-                <ChevronLeft size={18} />
+                <ChevronLeft size={16} />
                 Back
-              </motion.button>
+              </button>
               
-              <motion.button
+              <button
                 onClick={nextStep}
                 disabled={
                   (currentStep === 1 && (!selectedDates.checkIn || !selectedDates.checkOut)) ||
@@ -1430,52 +1143,33 @@ const HotelBookingInterface = () => {
                   (currentStep === 3 && (!personalInfo.firstName || !personalInfo.lastName || !personalInfo.email || !personalInfo.phone)) ||
                   (currentStep === 4 && (!paymentInfo.cardNumber || !paymentInfo.cardName || !paymentInfo.expiryDate || !paymentInfo.cvv))
                 }
-                className={`px-6 py-3 rounded-xl transition-all flex items-center gap-2 ${
+                className={`px-4 py-3 sm:px-6 sm:py-3 rounded-xl transition-all flex items-center justify-center gap-2 order-1 sm:order-2 ${
                   (currentStep === 1 && (!selectedDates.checkIn || !selectedDates.checkOut)) ||
                   (currentStep === 2 && !selectedRoom) ||
                   (currentStep === 3 && (!personalInfo.firstName || !personalInfo.lastName || !personalInfo.email || !personalInfo.phone)) ||
                   (currentStep === 4 && (!paymentInfo.cardNumber || !paymentInfo.cardName || !paymentInfo.expiryDate || !paymentInfo.cvv))
                     ? darkMode ? 'bg-gray-700 text-gray-500 cursor-not-allowed' : 'bg-gray-200 text-gray-400 cursor-not-allowed'
-                    : 'bg-gradient-to-r from-blue-500 to-purple-600 text-white hover:shadow-lg'
+                    : 'bg-gradient-to-r from-blue-500 to-purple-600 text-white hover:shadow-lg hover:scale-105'
                 }`}
-                whileHover={
-                  ((currentStep === 1 && (!selectedDates.checkIn || !selectedDates.checkOut)) ||
-                  (currentStep === 2 && !selectedRoom) ||
-                  (currentStep === 3 && (!personalInfo.firstName || !personalInfo.lastName || !personalInfo.email || !personalInfo.phone)) ||
-                  (currentStep === 4 && (!paymentInfo.cardNumber || !paymentInfo.cardName || !paymentInfo.expiryDate || !paymentInfo.cvv)))
-                    ? {}
-                    : { scale: 1.05 }
-                }
-                whileTap={
-                  !((currentStep === 1 && (!selectedDates.checkIn || !selectedDates.checkOut)) ||
-                  (currentStep === 2 && !selectedRoom) ||
-                  (currentStep === 3 && (!personalInfo.firstName || !personalInfo.lastName || !personalInfo.email || !personalInfo.phone)) ||
-                  (currentStep === 4 && (!paymentInfo.cardNumber || !paymentInfo.cardName || !paymentInfo.expiryDate || !paymentInfo.cvv)))
-                    ? { scale: 0.95 }
-                    : {}
-                }
               >
                 {currentStep === 4 ? 'Confirm Booking' : 'Continue'}
-                <ChevronRight size={18} />
-              </motion.button>
-            </motion.div>
+                <ChevronRight size={16} />
+              </button>
+            </div>
           )}
-        </motion.div>
+        </div>
       </div>
 
-      {/* Footer */}
-      <motion.footer 
-        className={`py-8 border-t transition-all duration-500 ${
+      {/* Footer - Mobile Optimized */}
+      <footer 
+        className={`py-6 sm:py-8 border-t transition-all duration-500 ${
           darkMode ? 'bg-gray-900 border-gray-700' : 'bg-white border-gray-200'
         }`}
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 0.5 }}
       >
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-            <div>
-              <h3 className={`text-lg font-semibold mb-4 ${darkMode ? 'text-white' : 'text-gray-900'}`}>
+        <div className="max-w-6xl mx-auto px-3 sm:px-4 lg:px-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8">
+            <div className="sm:col-span-2 lg:col-span-1">
+              <h3 className={`text-lg font-semibold mb-3 sm:mb-4 ${darkMode ? 'text-white' : 'text-gray-900'}`}>
                 LuxeStay
               </h3>
               <p className={`text-sm ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>
@@ -1483,69 +1177,63 @@ const HotelBookingInterface = () => {
               </p>
             </div>
             <div>
-              <h3 className={`text-lg font-semibold mb-4 ${darkMode ? 'text-white' : 'text-gray-900'}`}>
+              <h3 className={`text-lg font-semibold mb-3 sm:mb-4 ${darkMode ? 'text-white' : 'text-gray-900'}`}>
                 Quick Links
               </h3>
               <ul className={`space-y-2 text-sm ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>
                 {['Home', 'Rooms', 'About Us', 'Contact'].map((item) => (
-                  <motion.li
-                    key={item}
-                    whileHover={{ x: 5 }}
-                  >
-                    <a href="#" className="hover:underline">{item}</a>
-                  </motion.li>
+                  <li key={item}>
+                    <a href="#" className="hover:underline hover:translate-x-1 transition-transform inline-block">{item}</a>
+                  </li>
                 ))}
               </ul>
             </div>
             <div>
-              <h3 className={`text-lg font-semibold mb-4 ${darkMode ? 'text-white' : 'text-gray-900'}`}>
+              <h3 className={`text-lg font-semibold mb-3 sm:mb-4 ${darkMode ? 'text-white' : 'text-gray-900'}`}>
                 Contact
               </h3>
               <ul className={`space-y-2 text-sm ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>
                 <li className="flex items-center gap-2">
-                  <Phone size={14} />
-                  +1 (555) 123-4567
+                  <Phone size={12} className="flex-shrink-0" />
+                  <span>+1 (555) 123-4567</span>
                 </li>
                 <li className="flex items-center gap-2">
-                  <Mail size={14} />
-                  info@luxestay.com
+                  <Mail size={12} className="flex-shrink-0" />
+                  <span>info@luxestay.com</span>
                 </li>
                 <li className="flex items-center gap-2">
-                  <Location size={14} />
-                  123 Luxury Ave, Suite 100
+                  <Location size={12} className="flex-shrink-0" />
+                  <span>123 Luxury Ave, Suite 100</span>
                 </li>
               </ul>
             </div>
             <div>
-              <h3 className={`text-lg font-semibold mb-4 ${darkMode ? 'text-white' : 'text-gray-900'}`}>
+              <h3 className={`text-lg font-semibold mb-3 sm:mb-4 ${darkMode ? 'text-white' : 'text-gray-900'}`}>
                 Newsletter
               </h3>
-              <div className="flex gap-2">
-                <motion.input
+              <div className="flex flex-col sm:flex-row gap-2">
+                <input
                   type="email"
                   placeholder="Your email"
-                  className={`flex-1 px-4 py-2 rounded-lg border transition-all ${
+                  className={`flex-1 px-3 py-2 sm:px-4 sm:py-2 rounded-lg border transition-all focus:scale-[1.02] text-sm ${
                     darkMode ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-200 text-gray-900'
                   }`}
-                  whileFocus={{ scale: 1.02 }}
                 />
-                <motion.button
-                  className="px-4 py-2 rounded-lg bg-gradient-to-r from-blue-500 to-purple-600 text-white"
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
+                <button
+                  className="px-3 py-2 sm:px-4 sm:py-2 rounded-lg bg-gradient-to-r from-blue-500 to-purple-600 text-white hover:scale-105 transition-transform text-sm whitespace-nowrap"
                 >
                   Subscribe
-                </motion.button>
+                </button>
               </div>
             </div>
           </div>
-          <div className={`mt-8 pt-8 border-t text-sm text-center ${
+          <div className={`mt-6 sm:mt-8 pt-6 sm:pt-8 border-t text-xs sm:text-sm text-center ${
             darkMode ? 'border-gray-700 text-gray-500' : 'border-gray-200 text-gray-600'
           }`}>
             © {new Date().getFullYear()} LuxeStay. All rights reserved.
           </div>
         </div>
-      </motion.footer>
+      </footer>
     </div>
   );
 };

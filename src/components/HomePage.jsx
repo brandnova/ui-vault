@@ -11,7 +11,10 @@ import {
   BarChart3, 
   TrendingUp, 
   Hash,
-  Globe
+  Globe,
+  Stethoscope,
+  FileText,
+  Image
 } from 'lucide-react';
 
 // Icon mapping for your components
@@ -27,7 +30,13 @@ const getIconForComponent = (id) => {
     'portfolio': Briefcase,
     'task-flow-dashboard': Layout,
     'trading-dashboard': TrendingUp,
-    'uuid-generator': Hash
+    'uuid-generator': Hash,
+    'doctor-booking-app': Stethoscope,
+    'forex-trading-dashboard': BarChart3,
+    'gig-marketplace': Briefcase,
+    'blog-landing-page' : FileText,
+    'remote-job-platform': Globe,
+    'photo-gallery-page': Image
   };
   return iconMap[id] || Layout;
 };
@@ -132,6 +141,60 @@ const interfaceData = [
     tags: ['UUID', 'Generator', 'Developer'],
     gradient: 'bg-gradient-to-br from-teal-500 to-cyan-500',
     thumbnail: null
+  },
+  {
+    id: 'doctor-booking-app',
+    title: 'Doctor Booking App',
+    description: 'User-friendly interface for booking doctor appointments with calendar integration.',
+    category: 'Healthcare',
+    tags: ['Healthcare', 'Booking', 'Appointments'],
+    gradient: 'bg-gradient-to-br from-green-600 to-teal-600',
+    thumbnail: null
+  },
+  {
+    id: 'forex-trading-dashboard',
+    title: 'Forex Trading Dashboard',
+    description: 'Advanced forex trading dashboard with live currency pair tracking and analytics.',
+    category: 'Fintech',
+    tags: ['Forex', 'Trading', 'Finance'],
+    gradient: 'bg-gradient-to-br from-blue-700 to-indigo-700',
+    thumbnail: null
+  },
+  {
+    id: 'gig-marketplace',
+    title: 'Gig Marketplace',
+    description: 'Dynamic marketplace interface for freelancers to showcase and sell their services.',
+    category: 'Marketplace',
+    tags: ['Marketplace', 'Freelance', 'Services'],
+    gradient: 'bg-gradient-to-br from-purple-600 to-pink-600',
+    thumbnail: null
+  },
+  {
+    id: 'blog-landing-page',
+    title: 'Blog Landing Page',
+    description: 'Content management landing page for reading, creating, editing, and publishing blog posts.',
+    category: 'Content Management',
+    tags: ['Blog', 'CMS', 'Content', 'Publishing'],
+    gradient: 'bg-gradient-to-br from-yellow-500 to-orange-500',
+    thumbnail: null
+  },
+  {
+    id: 'remote-job-platform',
+    title: 'Remote Job Platform',
+    description: 'Comprehensive platform for finding and applying to remote job opportunities.',
+    category: 'Job Board',
+    tags: ['Remote', 'Jobs', 'Platform'],
+    gradient: 'bg-gradient-to-br from-gray-700 to-gray-800',
+    thumbnail: null
+  },
+  {
+    id: 'photo-gallery-page',
+    title: 'Photo Gallery Page',
+    description: 'Visually stunning photo gallery interface with smooth transitions and hover effects.',
+    category: 'Gallery',
+    tags: ['Gallery', 'Photos', 'Visual'],
+    gradient: 'bg-gradient-to-br from-pink-500 to-red-500',
+    thumbnail: null
   }
 ];
 
@@ -143,7 +206,7 @@ const HomePage = ({ onNavigate }) => {
         <div className="text-center mb-16">
           <div className="inline-flex items-center bg-purple-500/20 text-purple-300 px-6 py-3 rounded-full text-sm font-medium mb-6 backdrop-blur-sm border border-purple-500/30">
             <Sparkles className="w-4 h-4 mr-2" />
-            UI Showcase Collection
+            BRAND NOVA UI Showcase
           </div>
           <h1 className="text-6xl font-bold text-white mb-6 leading-tight">
             Interface
@@ -151,7 +214,7 @@ const HomePage = ({ onNavigate }) => {
             <br />Portfolio
           </h1>
           <p className="text-xl text-gray-300 max-w-2xl mx-auto">
-            A curated collection of modern, responsive interface designs crafted for visual impact and user engagement.
+            A curated collection of modern, responsive interface designs crafted for visual impact and user experience.
           </p>
         </div>
 
@@ -242,7 +305,7 @@ const HomePage = ({ onNavigate }) => {
         {/* Footer */}
         <div className="text-center mt-20 pb-12">
           <div className="text-gray-400 text-sm">
-            Built with React • Tailwind CSS • Crafted with ❤️
+            Built with React • Tailwind CSS • Crafted with ❤️ by BRAND NOVA
           </div>
         </div>
       </div>
