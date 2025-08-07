@@ -19,6 +19,10 @@ import GigMarketplace from "./pages/GigMarketplace"
 import BlogLandingPage from "./pages/BlogLandingPage"
 import RemoteJobPlatform from "./pages/RemoteJobPlatform"
 import PhotoGalleryPage from "./pages/PhotoGalleryPage"
+import PrimeTrustBank from "./pages/PrimeTrustBank"
+import BankingUserDashboard from "./pages/BankingUserDashboard"
+import BankingAdminDashboard from "./pages/BankingAdminDashboard"
+import StreamingPlatform from "./pages/StreamingPlatform"
 
 // Import components
 import HomePage from "./components/HomePage"
@@ -104,6 +108,10 @@ const App = () => {
     { id: "blog-landing-page", component: BlogLandingPage, title: "Blog Landing Page" },
     { id: "remote-job-platform", component: RemoteJobPlatform, title: "Remote Job Platform" },
     { id: "photo-gallery-page", component: PhotoGalleryPage, title: "Photo Gallery Page" },
+    { id: "prime-trust-bank", component: PrimeTrustBank, title: "Prime Trust Bank" },
+    { id: "banking-user-dashboard", component: BankingUserDashboard, title: "Banking User Dashboard" },
+    { id: "banking-admin-dashboard", component: BankingAdminDashboard, title: "Banking Admin Dashboard" },
+    { id: "streaming-platform", component: StreamingPlatform, title: "Streaming Platform" },
   ]
 
   // Navigation Functions
